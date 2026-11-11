@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>University Timetable Download Center</h3>
+
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-2">
+    <select name="academic_level" class="form-select">
+      <option value="">Academic Level</option>
+      <option value="diploma" {% if request.GET.academic_level == 'diploma' %}selected{% endif %}>Diploma</option>
+      <option value="degree" {% if request.GET.academic_level == 'degree' %}selected{% endif %}>Degree</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select name="timetable_type" class="form-select">
+      <option value="teaching" {% if not is_exam %}selected{% endif %}>Teaching</option>
+      <option value="examination" {% if is_exam %}selected{% endif %}>Examination</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select name="school" class="form-select"><option value="">School</option>{% for s in schools %}<option value="{{ s.id }}" {% if request.GET.school == s.id|stringformat:"s" %}selected{% endif %}>{{ s.code }}</option>{% endfor %}</select>
+  </div>
+  <div class="col-md-2">
+    <select name="department" class="form-select"><option value="">Department</option>{% for d in departments %}<option value="{{ d.id }}">{{ d.code }}</option>{% endfor %}</select>
+  </div>
+  <div class="col-md-2">
+    <select name="programme" class="form-select"><option value="">Programme</option>{% for p in programmes %}<option value="{{ p.id }}">{{ p.code }}</option>{% endfor %}</select>
+  </div>
+  <div class="col-md-2"><button class="btn btn-primary w-100">Filter</button></div>
+</form>
+
+<div class="card">
+  <div class="card-body">
+    <h5>Available Timetables</h5>
+    <table class="table table-bordered table-sm">
+      <thead class="table-success">
+        <tr><th>Year</th><th>Semester</th><th>View</th><th>PDF</th><th>Excel</th></tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td>Year {{ r.year }}</td>
+          <td>Semester {{ r.semester }}</td>
+          <td><a class="btn btn-sm btn-outline-success" href="{{ r.view_url }}" target="_blank">View</a></td>
+          <td><a class="btn btn-sm btn-success" href="{{ r.pdf_url }}">PDF Download</a></td>
+          <td><a class="btn btn-sm btn-primary" href="{{ r.excel_url }}">Excel Download</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center">No timetables available for the selected filters.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <a class="btn btn-warning" href="/reports/downloads/all/?{{ request.GET.urlencode }}">DOWNLOAD ALL AVAILABLE YEARS (ZIP)</a>
+  </div>
+</div>
+{% endblock %}

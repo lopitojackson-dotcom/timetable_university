@@ -1,0 +1,20 @@
+{% extends 'public/base.html' %}
+{% block title %}Examination Timetables{% endblock %}
+{% block content %}
+<section class="section"><div class="container">
+<h2 class="section-title">Examination Timetables</h2>
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-3"><select name="school" class="form-select"><option value="">School</option>{% for s in schools %}<option value="{{ s.id }}" {% if selected.school == s.id|stringformat:"s" %}selected{% endif %}>{{ s.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><select name="programme" class="form-select"><option value="">Programme</option>{% for p in programmes %}<option value="{{ p.id }}" {% if selected.programme == p.id|stringformat:"s" %}selected{% endif %}>{{ p.code }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><select name="period" class="form-select"><option value="">Period</option>{% for p in periods %}<option value="{{ p.id }}" {% if selected.period == p.id|stringformat:"s" %}selected{% endif %}>{{ p.name }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><select name="academic_level" class="form-select"><option value="">Level</option><option value="diploma" {% if selected.academic_level == 'diploma' %}selected{% endif %}>Diploma</option><option value="degree" {% if selected.academic_level == 'degree' %}selected{% endif %}>Degree</option></select></div>
+  <div class="col-12"><button class="btn btn-primary">Filter</button></div>
+</form>
+<table class="table table-bordered table-sm">
+  <thead><tr><th>Date</th><th>Day</th><th>Time</th><th>Unit</th><th>Lecturer</th><th>Venue</th><th>Candidates</th></tr></thead>
+  <tbody>
+    {% for s in sessions %}<tr><td>{{ s.examination_date }}</td><td>{{ s.day_of_week }}</td><td>{{ s.start_time }}-{{ s.end_time }}</td><td>{{ s.unit.code }} {{ s.unit.name }}</td><td>{{ s.unit_lecturer }}</td><td>{{ s.venue }}</td><td>{{ s.expected_candidates }}</td></tr>{% empty %}<tr><td colspan="7">No published exams.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div></section>
+{% endblock %}

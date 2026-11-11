@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h3 class="mb-3">{{ title|default:"Form" }}</h3>
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="mb-3">
+        <label class="form-label fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>
+        {{ field }}
+        {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+        {% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+      </div>
+      {% endfor %}
+      {% for e in form.non_field_errors %}<div class="alert alert-danger">{{ e }}</div>{% endfor %}
+      <div class="d-flex gap-2">
+        <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> Save</button>
+        <a class="btn btn-outline-secondary" href="{{ back_url }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('input, select, textarea').forEach(el => {
+  if (el.tagName === 'SELECT') el.classList.add('form-select');
+  else if (el.type !== 'checkbox' && el.type !== 'radio' && el.type !== 'file') el.classList.add('form-control');
+});
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'public/base.html' %}
+{% block title %}Schools and Departments{% endblock %}
+{% block content %}
+<section class="section"><div class="container">
+<h2 class="section-title">Schools and Departments</h2>
+<div class="row g-4">
+{% for school in schools %}
+<div class="col-md-6"><div class="card-feature p-4">
+<h5 class="text-primary">{{ school.name }}</h5>
+<p class="small text-muted">{{ school.code }}</p>
+<h6>Departments</h6>
+<ul class="small">
+{% for dept in school.departments.all %}<li>{{ dept.name }} ({{ dept.programmes.count }} programmes)</li>{% empty %}<li class="text-muted">No departments.</li>{% endfor %}
+</ul>
+</div></div>
+{% empty %}<div class="col-12 text-center text-muted">No schools available.</div>{% endfor %}
+</div></div></section>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'public/base.html' %}
+{% block title %}Contact & Support{% endblock %}
+{% block content %}
+<section class="section"><div class="container">
+<h2 class="section-title">Contact & Support</h2>
+{% if institution %}
+<p><strong>{{ institution.name }}</strong></p>
+{% if institution.address %}<p>{{ institution.address }}</p>{% endif %}
+{% if institution.email %}<p>Email: {{ institution.email }}</p>{% endif %}
+{% if institution.telephone %}<p>Telephone: {{ institution.telephone }}</p>{% endif %}
+{% if institution.website %}<p>Website: {{ institution.website }}</p>{% endif %}
+{% else %}
+<p class="text-muted">Contact information not configured.</p>
+{% endif %}
+<p class="mt-3">For system access, use the <a href="/accounts/login/">login portal</a>.</p>
+</div></section>
+{% endblock %}

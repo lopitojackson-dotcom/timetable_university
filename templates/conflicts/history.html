@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block page_title %}Conflict Resolution History{% endblock %}
+{% block content %}
+<h2>Conflict Resolution History</h2>
+<table class="table table-striped">
+  <thead><tr><th>ID</th><th>Status</th><th>Total</th><th>Resolved</th><th>Remaining</th><th>Started</th><th></th></tr></thead>
+  <tbody>
+  {% for run in object_list %}
+    <tr>
+      <td>{{ run.id }}</td>
+      <td>{{ run.status }}</td>
+      <td>{{ run.total_conflicts }}</td>
+      <td>{{ run.resolved }}</td>
+      <td>{{ run.remaining }}</td>
+      <td>{{ run.started_at }}</td>
+      <td><a class="btn btn-sm btn-outline-primary" href="{% url 'conflict_resolution_detail' run.id %}">View</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="7">No history.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

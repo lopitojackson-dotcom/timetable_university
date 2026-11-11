@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Conflict Detection</h3>
+  <a class="btn btn-primary" href="/conflicts/run/"><i class="fa fa-play"></i> Run Detection</a>
+  <a class="btn btn-warning" href="/conflicts/resolve/"><i class="fa fa-wand-magic-sparkles"></i> Resolve All Conflicts Automatically</a>
+</div>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr><th>Conflict</th></tr>
+        </thead>
+        <tbody>
+          {% for obj in object_list %}
+          <tr><td>{{ obj }}</td></tr>
+          {% empty %}
+          <tr><td class="text-center text-muted py-4">No conflicts found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if is_paginated %}
+    <nav><ul class="pagination justify-content-end mb-0">
+      {% if page_obj.has_previous %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Prev</a></li>{% endif %}
+      {% if page_obj.has_next %}<li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>{% endif %}
+    </ul></nav>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

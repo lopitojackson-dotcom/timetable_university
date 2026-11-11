@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}University Timetable Management{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="app-shell">
+  {% if user.is_authenticated %}
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      {% if institution and institution.logo %}
+      <img src="{{ institution.logo.url }}" alt="Logo" style="width:42px;height:42px;object-fit:contain;border-radius:8px;">
+      {% else %}
+      <div class="brand-icon"><i class="fa fa-university"></i></div>
+      {% endif %}
+      <div>
+        <div class="brand-title">{{ institution.name|default:"Timetable System" }}</div>
+        <div class="brand-sub">Management System</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">OVERVIEW</div>
+      <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="{% url 'dashboard' %}"><i class="fa fa-gauge-high"></i><span>Dashboard</span></a>
+
+      <div class="nav-section">ACADEMIC MANAGEMENT</div>
+      <a class="nav-link" href="/institutions/schools/"><i class="fa fa-school"></i><span>Schools</span></a>
+      <a class="nav-link" href="/institutions/departments/"><i class="fa fa-building"></i><span>Departments</span></a>
+      <a class="nav-link" href="/academics/programmes/"><i class="fa fa-graduation-cap"></i><span>Programmes</span></a>
+      <a class="nav-link" href="/academics/years/"><i class="fa fa-calendar"></i><span>Academic Years</span></a>
+      <a class="nav-link" href="/academics/semesters/"><i class="fa fa-calendar-week"></i><span>Semesters</span></a>
+      <a class="nav-link" href="/academics/classgroups/"><i class="fa fa-users"></i><span>Class Groups</span></a>
+      <a class="nav-link" href="/academics/units/"><i class="fa fa-book"></i><span>Academic Units</span></a>
+
+      <div class="nav-section">RESOURCES</div>
+      <a class="nav-link" href="/resources/lecturers/"><i class="fa fa-chalkboard-user"></i><span>Lecturers</span></a>
+      <a class="nav-link" href="/resources/invigilators/"><i class="fa fa-user-shield"></i><span>Invigilators</span></a>
+      <a class="nav-link" href="/resources/venues/"><i class="fa fa-door-open"></i><span>Venues</span></a>
+      <a class="nav-link" href="/resources/availability/"><i class="fa fa-clock"></i><span>Availability</span></a>
+      <a class="nav-link" href="/resources/room-utilization/"><i class="fa fa-chart-pie"></i><span>Room Utilization</span></a>
+
+      <div class="nav-section">TEACHING MANAGEMENT</div>
+      <a class="nav-link" href="/reports/lecturers/"><i class="fa fa-user-tie"></i><span>Lecturer Timetables</span></a>
+      <a class="nav-link" href="/teaching/sessions/"><i class="fa fa-table-list"></i><span>Teaching Sessions</span></a>
+      <a class="nav-link" href="/teaching/grid/"><i class="fa fa-calendar-days"></i><span>Teaching Grid</span></a>
+      <a class="nav-link" href="/scheduling/teaching/"><i class="fa fa-wand-magic-sparkles"></i><span>Generate Teaching</span></a>
+      <a class="nav-link" href="/conflicts/"><i class="fa fa-triangle-exclamation"></i><span>Conflict Detection</span></a>
+      <a class="nav-link" href="/audit/compliance/"><i class="fa fa-clipboard-check"></i><span>Compliance Audit</span></a>
+
+      <div class="nav-section">EXAMINATION MANAGEMENT</div>
+      <a class="nav-link" href="/examinations/periods/"><i class="fa fa-calendar-check"></i><span>Exam Periods</span></a>
+      <a class="nav-link" href="/examinations/sessions/"><i class="fa fa-file-pen"></i><span>Exam Sessions</span></a>
+      <a class="nav-link" href="/scheduling/exams/"><i class="fa fa-wand-magic-sparkles"></i><span>Generate Exams</span></a>
+
+      <div class="nav-section">PUBLICATION</div>
+      <a class="nav-link" href="/teaching/publish/"><i class="fa fa-upload"></i><span>Publish Teaching</span></a>
+      <a class="nav-link" href="/examinations/publish/"><i class="fa fa-upload"></i><span>Publish Exams</span></a>
+
+      <div class="nav-section">TIMETABLE DOWNLOADS</div>
+      <a class="nav-link" href="/reports/downloads/"><i class="fa fa-download"></i><span>Timetable Downloads</span></a>
+
+      <div class="nav-section">REPORTS</div>
+      <a class="nav-link" href="/reports/"><i class="fa fa-chart-line"></i><span>Reports</span></a>
+      <a class="nav-link" href="/reports/teaching/pdf/"><i class="fa fa-file-pdf"></i><span>Teaching PDF</span></a>
+      <a class="nav-link" href="/reports/exam/pdf/"><i class="fa fa-file-pdf"></i><span>Exam PDF</span></a>
+
+      {% if user.is_superuser %}
+      <div class="nav-section">INSTITUTION</div>
+      <a class="nav-link" href="/institutions/settings/"><i class="fa fa-building"></i><span>Institution Settings</span></a>
+      {% endif %}
+      <div class="nav-section">SYSTEM</div>
+      <a class="nav-link" href="/notifications/"><i class="fa fa-bell"></i><span>Notifications</span></a>
+      <a class="nav-link" href="/audit/"><i class="fa fa-list-check"></i><span>Audit Logs</span></a>
+      <a class="nav-link" href="/imports/"><i class="fa fa-file-import"></i><span>Import/Export</span></a>
+      <a class="nav-link" href="/public/teaching/"><i class="fa fa-globe"></i><span>Public Portal</span></a>
+      <a class="nav-link" href="{% url 'logout' %}"><i class="fa fa-right-from-bracket"></i><span>Logout</span></a>
+    </nav>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+  {% endif %}
+
+  <div class="main-area">
+    {% if user.is_authenticated %}
+    <header class="topbar">
+      <button class="btn btn-link sidebar-toggle" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+      <div class="topbar-title">{% block page_title %}{{ title|default:"Dashboard" }}{% endblock %}</div>
+      <div class="topbar-actions">
+        <div class="dropdown">
+          <a href="#" class="topbar-icon position-relative" data-bs-toggle="dropdown">
+            <i class="fa fa-bell"></i>
+            {% if unread_notifications %}<span class="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">{{ unread_notifications }}</span>{% endif %}
+          </a>
+          <div class="dropdown-menu dropdown-menu-end p-0" style="width:360px;max-height:420px;overflow:auto;">
+            <div class="p-2 border-bottom d-flex justify-content-between align-items-center">
+              <strong>Notifications</strong>
+              <a href="{% url 'notification_read_all' %}" class="small">Mark all read</a>
+            </div>
+            {% for n in request.user.notifications.all|slice:":8" %}
+              <a class="dropdown-item border-bottom {% if not n.is_read %}fw-bold{% endif %}" href="{% url 'notification_read' n.id %}">
+                <div class="small text-muted">{{ n.created_at|date:'Y-m-d H:i' }}</div>
+                <div>{{ n.title }}</div>
+                <div class="small">{{ n.message|truncatechars:80 }}</div>
+                {% if n.link %}<div class="small text-primary">View</div>{% endif %}
+              </a>
+            {% empty %}
+              <div class="p-3 text-muted small">No notifications.</div>
+            {% endfor %}
+            <div class="p-2 text-center">
+              <a href="/notifications/" class="btn btn-sm btn-outline-primary">VIEW ALL NOTIFICATIONS</a>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="btn btn-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fa fa-user-circle"></i> {{ user.username }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="/accounts/profile/">Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    {% endif %}
+    <main class="content-area">
+      {% if messages %}
+        {% for m in messages %}
+        <div class="alert alert-{{ m.tags|default:'info' }} alert-dismissible fade show" role="alert">
+          {{ m }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="app-footer">
+      &copy; 2026 University Timetable Management System
+    </footer>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarBackdrop').classList.toggle('show');
+}
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

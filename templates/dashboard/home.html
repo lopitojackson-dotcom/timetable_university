@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="mb-4">
+  <h2>Welcome back, {{ user.username }}</h2>
+  <p class="text-muted mb-0">University Teaching and Examination Timetable Management System</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Schools</div><h3 class="mb-0">{{ schools }}</h3></div><i class="fa fa-school fa-2x text-primary opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Departments</div><h3 class="mb-0">{{ departments }}</h3></div><i class="fa fa-building fa-2x text-primary opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Programmes</div><h3 class="mb-0">{{ programmes }}</h3></div><i class="fa fa-graduation-cap fa-2x text-primary opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Academic Units</div><h3 class="mb-0">{{ units }}</h3></div><i class="fa fa-book fa-2x text-primary opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Lecturers</div><h3 class="mb-0">{{ lecturers }}</h3></div><i class="fa fa-chalkboard-user fa-2x text-teal opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Venues</div><h3 class="mb-0">{{ venues }}</h3></div><i class="fa fa-door-open fa-2x text-teal opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Teaching Sessions</div><h3 class="mb-0">{{ teaching_sessions }}</h3></div><i class="fa fa-table-list fa-2x text-warning opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Exam Sessions</div><h3 class="mb-0">{{ exam_sessions }}</h3></div><i class="fa fa-file-pen fa-2x text-warning opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Unresolved Conflicts</div><h3 class="mb-0 text-danger">{{ conflicts }}</h3></div><i class="fa fa-triangle-exclamation fa-2x text-danger opacity-50"></i></div></div></div></div>
+  <div class="col-6 col-md-3"><div class="card"><div class="card-body"><div class="d-flex justify-content-between"><div><div class="text-muted small">Published Teaching</div><h3 class="mb-0 text-success">{{ published_teaching }}</h3></div><i class="fa fa-check-circle fa-2x text-success opacity-50"></i></div></div></div></div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="mb-3">Quick Actions</h5>
+        <div class="d-grid gap-2">
+          <a class="btn btn-primary" href="/scheduling/teaching/"><i class="fa fa-wand-magic-sparkles"></i> GENERATE NEW TIMETABLE</a>
+          <a class="btn btn-primary" href="/scheduling/exams/"><i class="fa fa-wand-magic-sparkles"></i> Generate Examination Timetable</a>
+          <a class="btn btn-outline-danger" href="/conflicts/detect/"><i class="fa fa-search"></i> DETECT ALL CONFLICTS</a>
+          <form method="post" action="/conflicts/resolve/" class="d-grid">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit"><i class="fa fa-bolt"></i> RESOLVE ALL CONFLICTS AUTOMATICALLY</button>
+          </form>
+          <a class="btn btn-outline-secondary" href="/conflicts/history/"><i class="fa fa-history"></i> VIEW CONFLICT HISTORY</a>
+          <a class="btn btn-outline-secondary" href="/scheduling/teaching/alternatives/"><i class="fa fa-list"></i> VIEW GENERATION HISTORY</a>
+          <a class="btn btn-outline-secondary" href="/teaching/sessions/"><i class="fa fa-table"></i> VIEW NEW TIMETABLES</a>
+          <a class="btn btn-outline-secondary" href="/teaching/publish/"><i class="fa fa-check"></i> VIEW PENDING APPROVALS</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="mb-3">Conflict Summary</h5>
+        <ul class="list-group list-group-flush mb-3">
+          <li class="list-group-item d-flex justify-content-between">Total conflicts <span class="badge bg-secondary">{{ conflicts }}</span></li>
+          <li class="list-group-item d-flex justify-content-between">Critical conflicts <span class="badge bg-danger">{{ critical_conflicts }}</span></li>
+          <li class="list-group-item d-flex justify-content-between">Resolvable conflicts <span class="badge bg-warning">{{ resolvable_conflicts }}</span></li>
+          <li class="list-group-item d-flex justify-content-between">Unresolved conflicts <span class="badge bg-dark">{{ unresolved_conflicts }}</span></li>
+        </ul>
+        <h5 class="mb-3">Charts</h5>
+        <canvas id="chart1" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('chart1'), {
+  type: 'doughnut',
+  data: { labels: ['Teaching Sessions','Exam Sessions','Conflicts'], datasets: [{ data: [{{ teaching_sessions }},{{ exam_sessions }},{{ conflicts }}], backgroundColor: ['#1e3a8a','#0ea5e9','#dc2626'] }] },
+  options: { plugins: { legend: { position: 'bottom' } } }
+});
+</script>
+{% endblock %}

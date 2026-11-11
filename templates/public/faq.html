@@ -1,0 +1,12 @@
+{% extends 'public/base.html' %}
+{% block title %}Frequently Asked Questions{% endblock %}
+{% block content %}
+<section class="section"><div class="container">
+<h2 class="section-title">Frequently Asked Questions</h2>
+<div class="accordion" id="faqAcc">
+  <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#q1">How do I access my timetable?</button></h2><div id="q1" class="accordion-collapse collapse show"><div class="accordion-body">Select your timetable type and academic details, then view or download.</div></div></div>
+  <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q2">Are timetables official?</button></h2><div id="q2" class="accordion-collapse collapse"><div class="accordion-body">Only approved and published timetables are shown publicly.</div></div></div>
+  <div class="accordion-item"><h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#q3">Can I download timetables?</button></h2><div id="q3" class="accordion-collapse collapse"><div class="accordion-body">Yes, PDF and Excel downloads are available where provided.</div></div></div>
+</div>
+</div></section>
+{% endblock %}

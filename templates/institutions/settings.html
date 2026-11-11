@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Institution Settings</h3>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="mb-3"><label>Official Institution Name</label><input name="name" value="{{ institution.name }}" class="form-control"></div>
+  <div class="mb-3"><label>Short Name</label><input name="short_name" value="{{ institution.short_name }}" class="form-control"></div>
+  <div class="mb-3"><label>Acronym</label><input name="acronym" value="{{ institution.acronym }}" class="form-control"></div>
+  <div class="mb-3"><label>Address</label><textarea name="address" class="form-control">{{ institution.address }}</textarea></div>
+  <div class="mb-3"><label>Postal Address</label><textarea name="postal_address" class="form-control">{{ institution.postal_address }}</textarea></div>
+  <div class="mb-3"><label>Email</label><input name="email" value="{{ institution.email }}" class="form-control"></div>
+  <div class="mb-3"><label>Telephone</label><input name="telephone" value="{{ institution.telephone }}" class="form-control"></div>
+  <div class="mb-3"><label>Website</label><input name="website" value="{{ institution.website }}" class="form-control"></div>
+  <div class="mb-3"><label>Motto</label><input name="motto" value="{{ institution.motto }}" class="form-control"></div>
+  <div class="mb-3"><label>Primary Color</label><input type="color" name="primary_color" value="{{ institution.primary_color }}" class="form-control"></div>
+  <div class="mb-3"><label>Secondary Color</label><input type="color" name="secondary_color" value="{{ institution.secondary_color }}" class="form-control"></div>
+  <div class="mb-3">
+    <label>Logo</label><br>
+    {% if institution.logo %}<img src="{{ institution.logo.url }}" style="max-height:80px;"><br>{% endif %}
+    <input type="file" name="logo" class="form-control">
+  </div>
+  <button class="btn btn-primary" type="submit">Save and Apply</button>
+</form>
+{% endblock %}

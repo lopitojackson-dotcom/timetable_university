@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Public Teaching Timetable</h3>
+<form method="get" class="row g-2 mb-3">
+  <div class="col"><select name="year" class="form-select"><option value="">Year</option>{% for y in years %}<option value="{{ y.id }}" {% if selected.year == y.id|stringformat:"s" %}selected{% endif %}>{{ y }}</option>{% endfor %}</select></div>
+  <div class="col"><select name="semester" class="form-select"><option value="">Semester</option>{% for s in semesters %}<option value="{{ s.id }}" {% if selected.semester == s.id|stringformat:"s" %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></div>
+  <div class="col"><select name="programme" class="form-select"><option value="">Programme</option>{% for p in programmes %}<option value="{{ p.id }}" {% if selected.programme == p.id|stringformat:"s" %}selected{% endif %}>{{ p }}</option>{% endfor %}</select></div>
+  <div class="col"><button class="btn btn-primary">Filter</button></div>
+</form>
+<table class="table table-bordered table-sm">
+  <thead><tr><th>Day</th><th>Time</th><th>Unit</th><th>Lecturer</th><th>Venue</th><th>Group</th></tr></thead>
+  <tbody>
+    {% for s in sessions %}<tr><td>{{ s.day }}</td><td>{{ s.start_time }}-{{ s.end_time }}</td><td>{{ s.unit.code }} {{ s.unit.name }}</td><td>{{ s.lecturer }}</td><td>{{ s.venue }}</td><td>{{ s.class_group }}</td></tr>{% empty %}<tr><td colspan="6">No published sessions.</td></tr>{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

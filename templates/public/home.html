@@ -1,0 +1,166 @@
+{% extends 'public/base.html' %}
+{% block title %}{{ institution.name|default:"University Timetable System" }} - Home{% endblock %}
+{% block content %}
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <h1>SMART UNIVERSITY TIMETABLE MANAGEMENT SYSTEM</h1>
+        <p class="mt-3">An integrated digital platform for managing university teaching and examination timetables. Access approved academic schedules, explore programme information, and stay informed through one centralized platform.</p>
+        <div class="mt-4 d-flex gap-3 flex-wrap">
+          <a href="{% url 'public_teaching_timetables' %}" class="btn btn-warning btn-lg fw-bold">EXPLORE TIMETABLES</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Overview -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title text-center">Simplifying Academic Scheduling Through Technology</h2>
+    <p class="text-center text-muted mx-auto" style="max-width:760px;">The University Timetable Management System provides a centralized platform for organizing, managing, publishing, and accessing teaching and examination timetables. It supports academic departments, lecturers, administrators, and students through a structured and efficient scheduling environment.</p>
+    <div class="row g-4 mt-3">
+      <div class="col-md-4">
+        <div class="card-feature p-4 text-center">
+          <div class="icon-circle mx-auto"><i class="fa fa-chalkboard"></i></div>
+          <h5>Teaching Timetables</h5>
+          <p class="text-muted small">Access approved teaching schedules by programme, year and semester.</p>
+          <a href="{% url 'public_teaching_timetables' %}" class="btn btn-sm btn-outline-primary">View</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-feature p-4 text-center">
+          <div class="icon-circle mx-auto"><i class="fa fa-file-pen"></i></div>
+          <h5>Examination Timetables</h5>
+          <p class="text-muted small">Explore published examination schedules and venues.</p>
+          <a href="{% url 'public_exam_timetables' %}" class="btn btn-sm btn-outline-primary">View</a>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-feature p-4 text-center">
+          <div class="icon-circle mx-auto"><i class="fa fa-graduation-cap"></i></div>
+          <h5>Academic Information</h5>
+          <p class="text-muted small">Find relevant academic calendars and programme information.</p>
+          <a href="{% url 'public_academic_calendar' %}" class="btn btn-sm btn-outline-primary">View</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick access -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title text-center">Quick Access</h2>
+    <div class="row g-3">
+      {% for label,url,desc,icon in quick_items %}
+      {% endfor %}
+      <div class="col-md-4 col-lg-2"><a href="{% url 'public_teaching_timetables' %}?academic_level=diploma" class="text-decoration-none text-dark"><div class="quick-card"><i class="fa fa-book-open text-primary mb-2"></i><h6>Diploma Teaching</h6><p class="small text-muted mb-0">Approved diploma teaching schedules.</p></div></a></div>
+      <div class="col-md-4 col-lg-2"><a href="{% url 'public_teaching_timetables' %}?academic_level=degree" class="text-decoration-none text-dark"><div class="quick-card"><i class="fa fa-graduation-cap text-primary mb-2"></i><h6>Degree Teaching</h6><p class="small text-muted mb-0">Approved degree teaching schedules.</p></div></a></div>
+      <div class="col-md-4 col-lg-2"><a href="{% url 'public_exam_timetables' %}?academic_level=diploma" class="text-decoration-none text-dark"><div class="quick-card"><i class="fa fa-file-pen text-primary mb-2"></i><h6>Diploma Exams</h6><p class="small text-muted mb-0">Published diploma examinations.</p></div></a></div>
+      <div class="col-md-4 col-lg-2"><a href="{% url 'public_exam_timetables' %}?academic_level=degree" class="text-decoration-none text-dark"><div class="quick-card"><i class="fa fa-file-signature text-primary mb-2"></i><h6>Degree Exams</h6><p class="small text-muted mb-0">Published degree examinations.</p></div></a></div>
+      <div class="col-md-4 col-lg-2"><a href="{% url 'public_academic_calendar' %}" class="text-decoration-none text-dark"><div class="quick-card"><i class="fa fa-calendar text-primary mb-2"></i><h6>Academic Calendar</h6><p class="small text-muted mb-0">Term and semester dates.</p></div></a></div>
+      <div class="col-md-4 col-lg-2"><a href="{% url 'public_announcements' %}" class="text-decoration-none text-dark"><div class="quick-card"><i class="fa fa-bullhorn text-primary mb-2"></i><h6>Announcements</h6><p class="small text-muted mb-0">Latest notices and updates.</p></div></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- Academic structure -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title text-center">Academic Structure</h2>
+    <div class="row g-4">
+      {% for school in schools %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card-feature p-4">
+          <h5 class="text-primary">{{ school.name }}</h5>
+          <p class="small text-muted mb-2">{{ school.departments.count }} departments</p>
+          <ul class="small mb-0">
+            {% for dept in school.departments.all %}
+            <li>{{ dept.name }} ({{ dept.programmes.count }} programmes)</li>
+            {% empty %}<li class="text-muted">No departments.</li>{% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center text-muted">No academic structure records available.</div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Announcements -->
+<section class="section">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="section-title mb-0">Latest Announcements</h2>
+      <a href="{% url 'public_announcements' %}" class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+    <div class="row g-4">
+      {% for a in announcements %}
+      <div class="col-md-4">
+        <div class="announcement-card">
+          <span class="badge bg-primary mb-2">{{ a.get_category_display }}</span>
+          <h6>{{ a.title }}</h6>
+          <p class="small text-muted">{{ a.description|truncatechars:120 }}</p>
+          <div class="small text-muted">{{ a.publication_date }}</div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12"><div class="alert alert-info">There are currently no new announcements.</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Why use -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title text-center">Why Use the System?</h2>
+    <div class="row g-4 text-center">
+      {% for t in features %}
+      {% endfor %}
+      <div class="col-md-3"><div class="card-feature p-3"><i class="fa fa-sitemap text-primary mb-2"></i><h6>Centralized Management</h6><p class="small text-muted">One platform for all timetables.</p></div></div>
+      <div class="col-md-3"><div class="card-feature p-3"><i class="fa fa-wand-magic-sparkles text-primary mb-2"></i><h6>Automated Generation</h6><p class="small text-muted">Smart scheduling engine.</p></div></div>
+      <div class="col-md-3"><div class="card-feature p-3"><i class="fa fa-triangle-exclamation text-primary mb-2"></i><h6>Conflict Detection</h6><p class="small text-muted">Automatic conflict resolution.</p></div></div>
+      <div class="col-md-3"><div class="card-feature p-3"><i class="fa fa-table text-primary mb-2"></i><h6>Published Access</h6><p class="small text-muted">Approved schedules online.</p></div></div>
+      <div class="col-md-3"><div class="card-feature p-3"><i class="fa fa-file-pdf text-primary mb-2"></i><h6>PDF & Excel</h6><p class="small text-muted">Downloadable documents.</p></div></div>
+      <div class="col-md-3"><div class="card-feature p-3"><i class="fa fa-mobile-screen text-primary mb-2"></i><h6>Responsive</h6><p class="small text-muted">Works on all devices.</p></div></div>
+      <div class="col-md-3"><div class="card-feature p-3"><i class="fa fa-shield-halved text-primary mb-2"></i><h6>Secure Access</h6><p class="small text-muted">Role-based administration.</p></div></div>
+      <div class="col-md-3"><div class="card-feature p-3"><i class="fa fa-calendar-days text-primary mb-2"></i><h6>Academic Resources</h6><p class="small text-muted">Calendar and guidelines.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title text-center">How It Works</h2>
+    <div class="row g-4 text-center">
+      <div class="col-md-4"><div class="step-num mx-auto">1</div><h6>Select Your Timetable</h6><p class="small text-muted">Choose teaching or examination timetables.</p></div>
+      <div class="col-md-4"><div class="step-num mx-auto">2</div><h6>Select Academic Details</h6><p class="small text-muted">Choose programme, year, semester and filters.</p></div>
+      <div class="col-md-4"><div class="step-num mx-auto">3</div><h6>View or Download</h6><p class="small text-muted">View approved schedules and download PDF/Excel.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Important links -->
+<section class="section bg-light">
+  <div class="container">
+    <h2 class="section-title text-center">Important Links & Resources</h2>
+    <div class="row g-2 justify-content-center">
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_teaching_timetables' %}">Teaching Timetables</a></div>
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_exam_timetables' %}">Examination Timetables</a></div>
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_teaching_timetables' %}?academic_level=diploma">Diploma Programmes</a></div>
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_teaching_timetables' %}?academic_level=degree">Degree Programmes</a></div>
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_academic_calendar' %}">Academic Calendar</a></div>
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_schools' %}">Schools & Departments</a></div>
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_announcements' %}">Announcements</a></div>
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_faq' %}">FAQs</a></div>
+      <div class="col-auto"><a class="btn btn-outline-primary btn-sm" href="{% url 'public_contact' %}">Contact & Support</a></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

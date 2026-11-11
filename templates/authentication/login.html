@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - University Timetable Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{font-family:'Inter',sans-serif;}
+    body{margin:0;background:#f4f7fb;}
+    .login-header{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.06);padding:.75rem 0;}
+    .login-header .inst-name{font-weight:800;color:#0f4c81;font-size:1.05rem;}
+    .login-header .inst-sub{font-size:.72rem;color:#64748b;}
+    .back-home{color:#0f4c81;text-decoration:none;font-weight:600;font-size:.9rem;}
+    .back-home:hover{color:#1b6ca8;}
+    .login-wrap{min-height:calc(100vh - 70px);display:flex;}
+    .brand-panel{background:linear-gradient(135deg,#0f4c81,#1b6ca8);color:#fff;padding:3rem 2.5rem;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;}
+    .brand-logo{max-width:180px;max-height:120px;width:auto;height:auto;object-fit:contain;margin-bottom:2rem;}
+    .brand-panel h1{font-weight:800;font-size:2rem;line-height:1.15;margin-bottom:1rem;}
+    .brand-panel p{opacity:.92;max-width:420px;line-height:1.6;margin-bottom:2rem;}
+    .feature{display:flex;align-items:center;gap:.85rem;margin-bottom:.85rem;}
+    .feature i{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .feature span{font-weight:500;}
+    .form-panel{background:#f4f7fb;display:flex;align-items:center;justify-content:center;padding:2.5rem 1.5rem;flex:1;}
+    .login-card{background:#fff;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.08);padding:2.5rem 2.25rem;max-width:400px;width:100%;}
+    .login-card h2{font-weight:800;color:#0f4c81;margin-bottom:.35rem;}
+    .login-card .subtitle{color:#64748b;margin-bottom:1.75rem;}
+    .form-label{font-weight:600;font-size:.9rem;margin-bottom:.4rem;}
+    .form-control{border-radius:10px;padding:.75rem 1rem;border:1px solid #d1d5db;}
+    .form-control:focus{border-color:#0f4c81;box-shadow:0 0 0 .2rem rgba(15,76,129,.15);}
+    .input-wrap{position:relative;}
+    .toggle-pw{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:#64748b;padding:0;cursor:pointer;}
+    .btn-signin{background:#0f4c81;color:#fff;border:none;border-radius:10px;padding:.8rem;font-weight:700;width:100%;transition:background .2s;}
+    .btn-signin:hover{background:#1b6ca8;color:#fff;}
+    .btn-signin:disabled{opacity:.75;}
+    @media(max-width:991px){.brand-panel{padding:2rem 1.5rem;} .brand-panel h1{font-size:1.6rem;} .brand-logo{max-width:140px;max-height:90px;}}
+  </style>
+</head>
+<body>
+  <header class="login-header">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-3">
+        {% if institution and institution.logo %}
+        <img src="{{ institution.logo.url }}" alt="Logo" style="max-height:44px;max-width:44px;width:auto;height:auto;object-fit:contain;">
+        {% else %}
+        <div style="width:44px;height:44px;background:#0f4c81;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;"><i class="fa fa-university"></i></div>
+        {% endif %}
+        <div>
+          <div class="inst-name">{{ institution.name|default:"University Timetable System" }}</div>
+          <div class="inst-sub">{{ institution.motto|default:"Teaching & Examination Timetable Management" }}</div>
+        </div>
+      </div>
+      <a href="/" class="back-home"><i class="fa fa-arrow-left me-1"></i>Back to Home</a>
+    </div>
+  </header>
+
+  <div class="login-wrap">
+    <div class="col-lg-6 brand-panel">
+      {% if institution and institution.logo %}
+      <img src="{{ institution.logo.url }}" alt="{{ institution.name }}" class="brand-logo">
+      {% else %}
+      <div style="width:140px;height:90px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:2rem;"><i class="fa fa-university fa-2x"></i></div>
+      {% endif %}
+      <h1>Welcome to the University Timetable Portal</h1>
+      <p>Access your academic timetable, examination information, and university scheduling services through one secure platform.</p>
+      <div>
+        <div class="feature"><i class="fa fa-chalkboard"></i><span>Teaching Timetable Access</span></div>
+        <div class="feature"><i class="fa fa-file-pen"></i><span>Examination Information</span></div>
+        <div class="feature"><i class="fa fa-shield-halved"></i><span>Secure Academic Portal</span></div>
+      </div>
+    </div>
+    <div class="form-panel">
+      <div class="login-card">
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to continue to your portal</p>
+        {% if form.errors %}
+        <div class="alert alert-danger py-2">Invalid username or password. Please try again.</div>
+        {% endif %}
+        <form method="post" id="loginForm" autocomplete="on">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_username" class="form-label">Username</label>
+            {{ form.username }}
+          </div>
+          <div class="mb-3">
+            <label for="id_password" class="form-label">Password</label>
+            <div class="input-wrap">
+              {{ form.password }}
+              <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password"><i class="fa fa-eye"></i></button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-signin" id="submitBtn">
+            <span id="btnText">SIGN IN</span>
+            <span id="btnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const pw = document.getElementById('id_password');
+    const toggle = document.getElementById('togglePw');
+    if (toggle && pw) {
+      toggle.addEventListener('click', function(){
+        const isPw = pw.type === 'password';
+        pw.type = isPw ? 'text' : 'password';
+        this.innerHTML = isPw ? '<i class="fa fa-eye-slash"></i>' : '<i class="fa fa-eye"></i>';
+      });
+    }
+    const form = document.getElementById('loginForm');
+    const btn = document.getElementById('submitBtn');
+    const txt = document.getElementById('btnText');
+    const sp = document.getElementById('btnSpinner');
+    if (form) {
+      form.addEventListener('submit', function(){
+        btn.disabled = true;
+        txt.classList.add('d-none');
+        sp.classList.remove('d-none');
+      });
+    }
+    document.querySelectorAll('#id_username,#id_password').forEach(function(el){
+      el.classList.add('form-control');
+      if (el.id === 'id_username') { el.autocomplete = 'username'; el.placeholder = 'Enter your username'; }
+      if (el.id === 'id_password') { el.autocomplete = 'current-password'; el.placeholder = 'Enter your password'; }
+    });
+  </script>
+</body>
+</html>

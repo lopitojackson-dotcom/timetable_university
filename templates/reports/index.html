@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Reports &amp; Timetable Printing</h3>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Teaching Timetable</h5>
+    <form method="get" action="/reports/teaching/layout/" class="row g-2 mb-2">
+      <div class="col-md-2"><select name="academic_level" class="form-select"><option value="">Academic Level</option><option value="diploma">Diploma</option><option value="degree">Degree</option></select></div>
+      <div class="col-md-2"><select name="academic_year" class="form-select"><option value="">Academic Year</option>{% for y in years %}<option value="{{ y.id }}">{{ y }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><select name="semester" class="form-select"><option value="">Semester</option>{% for s in semesters %}<option value="{{ s.id }}">{{ s }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><select name="school" class="form-select"><option value="">School</option>{% for s in schools %}<option value="{{ s.id }}">{{ s.code }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><select name="department" class="form-select"><option value="">Department</option>{% for d in departments %}<option value="{{ d.id }}">{{ d.code }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><select name="programme" class="form-select"><option value="">Programme</option>{% for p in programmes %}<option value="{{ p.id }}">{{ p.code }}</option>{% endfor %}</select></div>
+      <div class="col-md-1"><input name="version" value="DRAFT 1" class="form-control" placeholder="Version"></div>
+      <div class="col-md-1"><button class="btn btn-primary w-100">Apply</button></div>
+    </form>
+    <div class="btn-group">
+      <a class="btn btn-outline-success" href="/reports/teaching/layout/?preview=1" target="_blank">Preview PDF</a>
+      <a class="btn btn-success" href="/reports/teaching/layout/">Download PDF</a>
+      <a class="btn btn-outline-primary" href="/reports/teaching/excel/">Download Excel</a>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Examination Timetable</h5>
+    <form method="get" action="/reports/exam/layout/" class="row g-2 mb-2">
+      <div class="col-md-2"><select name="period" class="form-select"><option value="">Exam Period</option>{% for p in periods %}<option value="{{ p.id }}">{{ p }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><select name="academic_level" class="form-select"><option value="">Academic Level</option><option value="diploma">Diploma</option><option value="degree">Degree</option></select></div>
+      <div class="col-md-2"><select name="academic_year" class="form-select"><option value="">Academic Year</option>{% for y in years %}<option value="{{ y.id }}">{{ y }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><select name="semester" class="form-select"><option value="">Semester</option>{% for s in semesters %}<option value="{{ s.id }}">{{ s }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><select name="school" class="form-select"><option value="">School</option>{% for s in schools %}<option value="{{ s.id }}">{{ s.code }}</option>{% endfor %}</select></div>
+      <div class="col-md-2"><select name="programme" class="form-select"><option value="">Programme</option>{% for p in programmes %}<option value="{{ p.id }}">{{ p.code }}</option>{% endfor %}</select></div>
+      <div class="col-md-1"><input name="version" value="DRAFT 1" class="form-control" placeholder="Version"></div>
+      <div class="col-md-1"><button class="btn btn-primary w-100">Apply</button></div>
+    </form>
+    <div class="btn-group">
+      <a class="btn btn-outline-success" href="/reports/exam/layout/?preview=1" target="_blank">Preview PDF</a>
+      <a class="btn btn-success" href="/reports/exam/layout/">Download PDF</a>
+      <a class="btn btn-outline-primary" href="/reports/exam/excel/">Download Excel</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'public/base.html' %}
+{% block title %}Announcements{% endblock %}
+{% block content %}
+<section class="section"><div class="container">
+<h2 class="section-title">Announcements</h2>
+<div class="row g-4">
+{% for a in announcements %}
+<div class="col-md-6"><div class="announcement-card">
+<span class="badge bg-primary mb-2">{{ a.get_category_display }}</span>
+<h5>{{ a.title }}</h5>
+<p>{{ a.description }}</p>
+<div class="small text-muted">{{ a.publication_date }}</div>
+</div></div>
+{% empty %}
+<div class="col-12"><div class="alert alert-info">There are currently no new announcements.</div></div>
+{% endfor %}
+</div></div></section>
+{% endblock %}

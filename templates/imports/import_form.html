@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Import Data</h3>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label>Model</label>
+    <select name="model_name" class="form-select">
+      <option>School</option><option>Department</option><option>Programme</option>
+      <option>Lecturer</option><option>Venue</option><option>AcademicUnit</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <input type="file" name="file" class="form-control" accept=".xlsx,.xls">
+  </div>
+  <button class="btn btn-primary" type="submit">Upload</button>
+</form>
+{% endblock %}

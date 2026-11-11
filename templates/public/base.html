@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}University Timetable Management System{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--primary:#0f4c81;--secondary:#1b6ca8;--accent:#f59e0b;--dark:#0b1f33;--light:#f4f7fb;}
+    body{font-family:'Inter',sans-serif;color:#1f2937;background:#fff;}
+    .topbar{background:var(--dark);color:#fff;font-size:.85rem;padding:.5rem 0;}
+    .topbar a{color:#cbd5e1;text-decoration:none;margin-left:.75rem;}
+    .topbar a:hover{color:#fff;}
+    .navbar-brand .inst-name{font-weight:800;color:var(--primary);}
+    .navbar{background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.08);padding:.75rem 0;}
+    .nav-link{font-weight:600;color:#1f2937 !important;padding:.5rem 1rem !important;}
+    .nav-link:hover,.dropdown-item:hover{color:var(--primary) !important;background:#eef4fa;}
+    .dropdown-menu{border:none;box-shadow:0 8px 24px rgba(0,0,0,.12);border-radius:10px;}
+    .btn-login{background:var(--primary);color:#fff;border-radius:8px;padding:.5rem 1.25rem;font-weight:600;}
+    .btn-login:hover{background:var(--secondary);color:#fff;}
+    .hero{background:linear-gradient(120deg,rgba(15,76,129,.92),rgba(27,108,168,.85)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat; color:#fff; padding:6rem 0 5rem; position:relative;}
+    .hero h1{font-size:3rem;font-weight:800;line-height:1.1;}
+    .hero p{font-size:1.15rem;max-width:680px;opacity:.95;}
+    .section{padding:4rem 0;}
+    .section-title{font-weight:800;color:var(--primary);margin-bottom:1rem;}
+    .card-feature{border:none;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.07);transition:transform .25s,box-shadow .25s;height:100%;}
+    .card-feature:hover{transform:translateY(-6px);box-shadow:0 12px 28px rgba(0,0,0,.12);}
+    .icon-circle{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-size:1.5rem;margin-bottom:1rem;}
+    .quick-card{background:#fff;border-radius:14px;padding:1.5rem;box-shadow:0 4px 16px rgba(0,0,0,.06);transition:all .25s;border-left:4px solid var(--accent);}
+    .quick-card:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(0,0,0,.1);}
+    .announcement-card{background:#fff;border-radius:12px;padding:1.25rem;box-shadow:0 4px 14px rgba(0,0,0,.06);height:100%;}
+    .step-num{width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;margin-bottom:1rem;}
+    .footer{background:var(--dark);color:#cbd5e1;padding:3rem 0 1rem;}
+    .footer h6{color:#fff;font-weight:700;margin-bottom:1rem;}
+    .footer a{color:#cbd5e1;text-decoration:none;display:block;margin-bottom:.4rem;font-size:.9rem;}
+    .footer a:hover{color:#fff;}
+    .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:1rem;margin-top:2rem;font-size:.85rem;}
+    @media(max-width:768px){.hero h1{font-size:2rem;} .hero{padding:4rem 0 3rem;}}
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="{% url 'public_home' %}">
+        {% if institution and institution.logo %}
+        <img src="{{ institution.logo.url }}" alt="Logo" style="height:46px;margin-right:10px;">
+        {% else %}
+        <div style="width:46px;height:46px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;margin-right:10px;"><i class="fa fa-university"></i></div>
+        {% endif %}
+        <div>
+          <div class="inst-name">{{ institution.name|default:"University Timetable System" }}</div>
+          <div style="font-size:.7rem;color:#64748b;">{{ institution.motto|default:"Teaching & Examination Timetable Management" }}</div>
+        </div>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="{% url 'public_home' %}">Home</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">About</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'public_about' %}">About Us</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_about' %}#overview">System Overview</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_about' %}#vision">Vision and Mission</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_about' %}#features">System Features</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Academic Timetables</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'public_teaching_timetables' %}">Teaching Timetables</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_exam_timetables' %}">Examination Timetables</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_teaching_timetables' %}?academic_level=diploma">Diploma Programmes</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_teaching_timetables' %}?academic_level=degree">Degree Programmes</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_academic_calendar' %}">Academic Calendar</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Schools & Departments</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'public_schools' %}">Schools</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_schools' %}">Departments</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_schools' %}">Programmes</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Students</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'public_teaching_timetables' %}">Student Timetable Access</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_exam_timetables' %}">Examination Information</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_academic_calendar' %}">Academic Calendar</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_faq' %}">FAQs</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Staff</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'public_teaching_timetables' %}">Lecturer Timetable Information</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_exam_timetables' %}">Examination Information</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_faq' %}">Staff Guidelines</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Announcements</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'public_announcements' %}">Latest Notices</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_announcements' %}">System Updates</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Contact</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'public_contact' %}">Contact Information</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_contact' %}">Help and Support</a></li>
+              <li><a class="dropdown-item" href="{% url 'public_contact' %}">Feedback</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-3">
+          <h6>About the System</h6>
+          <p class="small">A centralized platform for managing university teaching and examination timetables, supporting departments, lecturers, administrators and students.</p>
+          <a href="{% url 'public_about' %}">About Us</a>
+          <a href="{% url 'public_about' %}#features">System Features</a>
+          <a href="{% url 'public_about' %}#vision">Vision and Mission</a>
+        </div>
+        <div class="col-md-3">
+          <h6>Academic Timetables</h6>
+          <a href="{% url 'public_teaching_timetables' %}">Teaching Timetables</a>
+          <a href="{% url 'public_exam_timetables' %}">Examination Timetables</a>
+          <a href="{% url 'public_teaching_timetables' %}?academic_level=diploma">Diploma Timetables</a>
+          <a href="{% url 'public_teaching_timetables' %}?academic_level=degree">Degree Timetables</a>
+          <a href="{% url 'public_academic_calendar' %}">Academic Calendar</a>
+        </div>
+        <div class="col-md-3">
+          <h6>Quick Links</h6>
+          <a href="{% url 'public_schools' %}">Schools</a>
+          <a href="{% url 'public_schools' %}">Departments</a>
+          <a href="{% url 'public_schools' %}">Programmes</a>
+          <a href="{% url 'public_announcements' %}">Announcements</a>
+          <a href="{% url 'public_faq' %}">FAQs</a>
+          <a href="/accounts/login/" class="fw-bold text-warning"><i class="fa fa-right-to-bracket me-1"></i>PORTAL LOGIN</a>
+        </div>
+        <div class="col-md-3">
+          <h6>Contact & Support</h6>
+          {% if institution %}
+          <p class="small mb-1"><i class="fa fa-building me-2"></i>{{ institution.name }}</p>
+          {% if institution.address %}<p class="small mb-1"><i class="fa fa-location-dot me-2"></i>{{ institution.address }}</p>{% endif %}
+          {% if institution.email %}<p class="small mb-1"><i class="fa fa-envelope me-2"></i>{{ institution.email }}</p>{% endif %}
+          {% if institution.telephone %}<p class="small mb-1"><i class="fa fa-phone me-2"></i>{{ institution.telephone }}</p>{% endif %}
+          {% if institution.website %}<p class="small mb-1"><i class="fa fa-globe me-2"></i>{{ institution.website }}</p>{% endif %}
+          {% endif %}
+        </div>
+      </div>
+      <div class="footer-bottom d-flex flex-wrap justify-content-between">
+        <div>&copy; {% now "Y" %} {{ institution.name|default:"University Timetable Management System" }}. All rights reserved.</div>
+        <div><a href="#">Privacy Policy</a> | <a href="#">Terms and Conditions</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

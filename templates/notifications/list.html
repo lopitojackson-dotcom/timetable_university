@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Notifications</h3>
+  <div>
+    <a class="btn btn-sm btn-outline-primary" href="/notifications/read-all/">Mark all read</a>
+  </div>
+</div>
+<div class="mb-3">
+  <form method="get" class="row g-2">
+    <div class="col-md-4">
+      <select name="type" class="form-select form-select-sm">
+        <option value="">All types</option>
+        {% for val,label in notification_types %}
+        <option value="{{ val }}" {% if request.GET.type == val %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <select name="read" class="form-select form-select-sm">
+        <option value="">All</option>
+        <option value="unread" {% if request.GET.read == 'unread' %}selected{% endif %}>Unread</option>
+        <option value="read" {% if request.GET.read == 'read' %}selected{% endif %}>Read</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-sm btn-primary" type="submit">Filter</button>
+    </div>
+  </form>
+</div>
+<div class="list-group">
+  {% for n in object_list %}
+  <div class="list-group-item {% if not n.is_read %}list-group-item-warning{% endif %}">
+    <div class="d-flex w-100 justify-content-between">
+      <h6 class="mb-1"><a href="{% url 'notification_read' n.pk %}">{{ n.title }}</a></h6>
+      <small>{{ n.created_at }}</small>
+    </div>
+    <p class="mb-1">{{ n.message }}</p>
+    <div class="d-flex gap-2">
+      {% if n.link %}<a class="btn btn-sm btn-outline-primary" href="{% url 'notification_read' n.pk %}">View</a>{% endif %}
+      {% if not n.is_read %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'notification_read' n.pk %}">Mark read</a>{% endif %}
+      <a class="btn btn-sm btn-outline-danger" href="/notifications/{{ n.pk }}/delete/">Delete</a>
+    </div>
+  </div>
+  {% empty %}
+  <div class="alert alert-secondary">No notifications.</div>
+  {% endfor %}
+</div>
+{% endblock %}

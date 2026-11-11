@@ -1,0 +1,13 @@
+{% extends 'public/base.html' %}
+{% block title %}Academic Calendar{% endblock %}
+{% block content %}
+<section class="section"><div class="container">
+<h2 class="section-title">Academic Calendar</h2>
+<table class="table table-bordered">
+<thead><tr><th>Academic Year</th><th>Start</th><th>End</th></tr></thead>
+<tbody>
+{% for y in years %}<tr><td>{{ y.name }}</td><td>{{ y.start_date }}</td><td>{{ y.end_date }}</td></tr>{% empty %}<tr><td colspan="3" class="text-muted">No academic years available.</td></tr>{% endfor %}
+</tbody>
+</table>
+</div></section>
+{% endblock %}

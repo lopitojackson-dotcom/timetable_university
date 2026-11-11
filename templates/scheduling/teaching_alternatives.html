@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block page_title %}Teaching Alternatives{% endblock %}
+{% block content %}
+<h3>Teaching Timetable Alternatives</h3>
+<p class="text-muted">Run #{{ run.id }} - {{ run.academic_year }} {{ run.semester }}</p>
+<div class="row g-3">
+  {% for a in alternatives %}
+  <div class="col-md-4">
+    <div class="card {% if a.selected %}border-primary{% endif %}">
+      <div class="card-body">
+        <h5>Alternative {{ a.number }}</h5>
+        <p class="mb-1">Score: <strong>{{ a.score }}</strong></p>
+        <p class="mb-1">Conflicts: {{ a.conflicts }}</p>
+        <p class="mb-1">Unscheduled: {{ a.unscheduled }}</p>
+        <p class="mb-2">Status: {% if a.valid %}<span class="badge bg-success">Valid</span>{% else %}<span class="badge bg-danger">Invalid</span>{% endif %}</p>
+        <div class="d-flex gap-2">
+          <a class="btn btn-sm btn-outline-primary" href="/teaching/sessions/?alternative={{ a.id }}">View Sessions</a>
+          {% if not a.selected %}<a class="btn btn-sm btn-primary" href="/scheduling/teaching/alternatives/select/{{ a.id }}/">Select</a>{% else %}<span class="badge bg-primary">Selected</span>{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

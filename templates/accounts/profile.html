@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Profile</h3>
+<p>Username: {{ user.username }}</p>
+<p>Role: {{ user.get_role_display }}</p>
+{% endblock %}

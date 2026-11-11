@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block page_title %}Resolution Detail{% endblock %}
+{% block content %}
+<h2>Resolution Run {{ object.id }}</h2>
+<p>Status: {{ object.status }} | Total: {{ object.total_conflicts }} | Resolved: {{ object.resolved }} | Remaining: {{ object.remaining }}</p>
+<table class="table">
+  <thead><tr><th>Type</th><th>Message</th><th>Status</th><th>Strategy</th></tr></thead>
+  <tbody>
+  {% for r in object.records.all %}
+    <tr><td>{{ r.conflict_type }}</td><td>{{ r.conflict_message }}</td><td>{{ r.status }}</td><td>{{ r.strategy }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

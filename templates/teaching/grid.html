@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Teaching Timetable Grid</h3>
+<form method="get" class="row g-2 mb-3">
+  <div class="col"><select name="academic_year" class="form-select"><option value="">Year</option>{% for y in years %}<option value="{{ y.id }}">{{ y }}</option>{% endfor %}</select></div>
+  <div class="col"><select name="semester" class="form-select"><option value="">Semester</option>{% for s in semesters %}<option value="{{ s.id }}">{{ s }}</option>{% endfor %}</select></div>
+  <div class="col"><select name="programme" class="form-select"><option value="">Programme</option>{% for p in programmes %}<option value="{{ p.id }}">{{ p }}</option>{% endfor %}</select></div>
+  <div class="col"><button class="btn btn-primary">Filter</button></div>
+</form>
+<table class="table table-bordered table-sm">
+  <thead><tr><th>Day/Time</th>{% for sl in slots %}<th>{{ sl.name }}<br>{{ sl.start_time }}-{{ sl.end_time }}</th>{% endfor %}</tr></thead>
+  <tbody>
+    {% for row in rows %}
+    <tr><th>{{ row.day }}</th>
+      {% for cell in row.cells %}
+      <td>
+        {% for s in cell %}{{ s.unit.code }} ({{ s.lecturer }}) @ {{ s.venue }}<br>{% endfor %}
+      </td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

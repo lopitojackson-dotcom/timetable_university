@@ -1,0 +1,101 @@
+:root {
+  --navy: #0f172a;
+  --royal: #1e3a8a;
+  --accent: #0ea5e9;
+  --teal: #14b8a6;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --radius: 14px;
+  --shadow: 0 6px 20px rgba(15,23,42,0.06);
+}
+
+* { box-sizing: border-box; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  font-size: 14px;
+}
+
+.app-shell { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #e2e8f0;
+  padding: 18px 14px;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  overflow-y: auto;
+  z-index: 1040;
+  transition: transform .25s ease;
+}
+.sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 8px 10px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px; }
+.brand-icon { width: 42px; height: 42px; border-radius: 12px; background: linear-gradient(135deg,#0ea5e9,#14b8a6); display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; }
+.brand-title { font-weight: 700; font-size: 16px; color: #fff; }
+.brand-sub { font-size: 11px; color: #94a3b8; }
+
+.sidebar-nav { display: flex; flex-direction: column; gap: 2px; }
+.nav-section { font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 1px; margin: 14px 8px 6px; }
+.nav-link { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; color: #cbd5e1; text-decoration: none; font-size: 13.5px; transition: all .15s ease; }
+.nav-link i { width: 18px; text-align: center; }
+.nav-link:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.nav-link.active { background: linear-gradient(90deg, rgba(14,165,233,0.25), rgba(20,184,166,0.15)); color: #fff; border-left: 3px solid var(--accent); }
+
+.sidebar-backdrop { display: none; }
+@media (max-width: 991px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-backdrop.show { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1030; }
+}
+
+.main-area { margin-left: 260px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+@media (max-width: 991px) { .main-area { margin-left: 0; } }
+
+.topbar { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; gap: 16px; position: sticky; top: 0; z-index: 1020; }
+.sidebar-toggle { display: none; }
+@media (max-width: 991px) { .sidebar-toggle { display: inline-block; } }
+.topbar-title { font-weight: 600; font-size: 18px; flex: 1; }
+.topbar-actions { display: flex; align-items: center; gap: 12px; }
+.topbar-icon { color: var(--muted); font-size: 18px; text-decoration: none; }
+
+.content-area { padding: 24px; flex: 1; }
+.app-footer { padding: 12px 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); background: var(--card); }
+
+.card { border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.card-body { padding: 20px; }
+
+.btn { border-radius: 10px; font-weight: 500; }
+.btn-primary { background: linear-gradient(135deg, var(--royal), var(--accent)); border: none; }
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-outline-primary { border-color: var(--royal); color: var(--royal); }
+.btn-outline-primary:hover { background: var(--royal); color: #fff; }
+
+.form-control, .form-select { border-radius: 10px; border: 1px solid var(--border); padding: 9px 12px; }
+.form-control:focus, .form-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(14,165,233,0.15); }
+
+.table { font-size: 13.5px; }
+.table thead th { font-weight: 600; color: var(--muted); border-bottom: 2px solid var(--border); }
+.table-hover tbody tr:hover { background: #f8fafc; }
+
+.alert { border-radius: 10px; border: none; }
+
+.badge { border-radius: 8px; }
+
+h1,h2,h3,h4,h5 { font-weight: 600; color: var(--navy); }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+
+.shadow-sm { box-shadow: var(--shadow) !important; }
+
+@media print {
+  .sidebar, .topbar, .app-footer { display: none !important; }
+  .main-area { margin-left: 0; }
+}

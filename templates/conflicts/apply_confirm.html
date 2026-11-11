@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block page_title %}Apply Resolution{% endblock %}
+{% block content %}
+<h2>Apply Resolution Run {{ run.id }}</h2>
+<p>Status: {{ run.status }} | Total: {{ run.total_conflicts }} | Resolved: {{ run.resolved }} | Remaining: {{ run.remaining }}</p>
+<p>Are you sure you want to apply all proposed changes?</p>
+<form method="post" action="{% url 'conflict_apply' run.id %}">{% csrf_token %}
+  <button class="btn btn-success" type="submit">APPLY ALL PROPOSED CHANGES</button>
+</form>
+<a class="btn btn-secondary" href="{% url 'conflict_cancel' run.id %}">CANCEL</a>
+{% endblock %}

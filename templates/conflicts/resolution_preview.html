@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block page_title %}Resolution Preview{% endblock %}
+{% block content %}
+<h2>Resolution Preview</h2>
+<p>Total conflicts: {{ result.conflicts_detected }} | Resolved: {{ result.resolved }} | Remaining: {{ result.remaining }} | Applied: {{ result.applied }}</p>
+<table class="table">
+  <thead><tr><th>Conflict</th><th>Original</th><th>Proposed</th></tr></thead>
+  <tbody>
+  {% for r in run.records.all %}
+    <tr>
+      <td>{{ r.conflict_message }}</td>
+      <td><pre>{{ r.original }}</pre></td>
+      <td><pre>{{ r.proposed }}</pre></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<form method="post" action="{% url 'conflict_apply' run.id %}">{% csrf_token %}
+  <button class="btn btn-success" type="submit">APPLY ALL PROPOSED CHANGES</button>
+</form>
+<a class="btn btn-secondary" href="{% url 'conflict_cancel' run.id %}">CANCEL</a>
+{% endblock %}

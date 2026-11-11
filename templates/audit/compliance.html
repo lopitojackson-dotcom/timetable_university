@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>University Timetable Compliance Audit</h3>
+<div class="row mb-3">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Teaching Coverage</h5>
+        <p>Total: {{ summary.teaching.total }} | Pass: {{ summary.teaching.pass }} | Missing: {{ summary.teaching.missing }} | Fail: {{ summary.teaching.fail }} | Excess: {{ summary.teaching.excess }}</p>
+        <p>Coverage: {{ summary.teaching.percentage }}%</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <h5>Examination Coverage</h5>
+        <p>Total: {{ summary.examination.total }} | Pass: {{ summary.examination.pass }} | Missing: {{ summary.examination.missing }} | Fail: {{ summary.examination.fail }}</p>
+        <p>Coverage: {{ summary.examination.percentage }}%</p>
+      </div>
+    </div>
+  </div>
+</div>
+<h5>Teaching Deficiencies (first 200)</h5>
+<table class="table table-sm table-bordered">
+  <thead><tr><th>Programme</th><th>Y</th><th>S</th><th>Unit</th><th>Group</th><th>Req</th><th>Sched</th><th>Status</th><th>Issues</th></tr></thead>
+  <tbody>
+  {% for r in teaching %}
+    <tr>
+      <td>{{ r.programme }}</td><td>{{ r.year }}</td><td>{{ r.semester }}</td><td>{{ r.unit_code }}</td><td>{{ r.group }}</td>
+      <td>{{ r.required_hours }}</td><td>{{ r.scheduled_hours }}</td><td>{{ r.status }}</td><td>{{ r.issues }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+<h5>Examination Deficiencies (first 200)</h5>
+<table class="table table-sm table-bordered">
+  <thead><tr><th>Programme</th><th>Y</th><th>S</th><th>Unit</th><th>Group</th><th>Status</th><th>Issues</th></tr></thead>
+  <tbody>
+  {% for r in exam %}
+    <tr>
+      <td>{{ r.programme }}</td><td>{{ r.year }}</td><td>{{ r.semester }}</td><td>{{ r.unit_code }}</td><td>{{ r.group }}</td>
+      <td>{{ r.status }}</td><td>{{ r.issues }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

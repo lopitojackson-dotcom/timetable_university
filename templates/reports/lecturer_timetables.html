@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Individual Lecturer Timetable Management</h3>
+
+<form method="get" class="row g-2 mb-3">
+  <div class="col-md-3"><input name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search name or staff no"></div>
+  <div class="col-md-2">
+    <select name="school" class="form-select"><option value="">School</option>{% for s in schools %}<option value="{{ s.id }}">{{ s.code }}</option>{% endfor %}</select>
+  </div>
+  <div class="col-md-2">
+    <select name="department" class="form-select"><option value="">Department</option>{% for d in departments %}<option value="{{ d.id }}">{{ d.code }}</option>{% endfor %}</select>
+  </div>
+  <div class="col-md-2">
+    <select name="academic_year" class="form-select"><option value="">Academic Year</option>{% for y in years %}<option value="{{ y.id }}">{{ y }}</option>{% endfor %}</select>
+  </div>
+  <div class="col-md-2">
+    <select name="semester" class="form-select"><option value="">Semester</option>{% for s in semesters %}<option value="{{ s.id }}">{{ s }}</option>{% endfor %}</select>
+  </div>
+  <div class="col-md-1"><button class="btn btn-primary w-100">Filter</button></div>
+</form>
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body" style="max-height:500px;overflow:auto;">
+        <h5>Lecturers</h5>
+        <ul class="list-group">
+          {% for l in lecturers %}
+          <li class="list-group-item">
+            <a href="?lecturer={{ l.id }}&{{ request.GET.urlencode }}">{{ l.full_name }}</a>
+            <small class="text-muted d-block">{{ l.staff_number }} - {{ l.department }}</small>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    {% if selected %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5>Lecturer Details</h5>
+        <p><strong>Name:</strong> {{ selected.full_name }}<br>
+        <strong>Staff No:</strong> {{ selected.staff_number }}<br>
+        <strong>School:</strong> {{ selected.school }}<br>
+        <strong>Department:</strong> {{ selected.department }}</p>
+        <div class="btn-group">
+          <a class="btn btn-outline-success" href="/reports/lecturers/pdf/?lecturer={{ selected.id }}&{{ request.GET.urlencode }}&preview=1" target="_blank">View Weekly Timetable</a>
+          <a class="btn btn-success" href="/reports/lecturers/pdf/?lecturer={{ selected.id }}&{{ request.GET.urlencode }}">Download PDF</a>
+          <a class="btn btn-primary" href="/reports/lecturers/excel/?lecturer={{ selected.id }}&{{ request.GET.urlencode }}">Download Excel</a>
+          <a class="btn btn-warning" href="/reports/lecturers/bulk/?{{ request.GET.urlencode }}">Generate All Lecturer Timetables</a>
+        </div>
+      </div>
+    </div>
+    {% if workload %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5>Weekly Workload</h5>
+        <table class="table table-sm">
+          <tr><td>Weekly teaching sessions</td><td>{{ workload.total_sessions }}</td></tr>
+          <tr><td>Weekly teaching hours</td><td>{{ workload.total_hours }}</td></tr>
+          <tr><td>Academic units</td><td>{{ workload.units }}</td></tr>
+          <tr><td>Programmes</td><td>{{ workload.programmes }}</td></tr>
+          <tr><td>Departments</td><td>{{ workload.departments }}</td></tr>
+          <tr><td>Class groups</td><td>{{ workload.groups }}</td></tr>
+          <tr><td>Free sessions</td><td>{{ workload.free_sessions }}</td></tr>
+          <tr><td>Scheduling conflicts</td><td>{{ workload.conflicts }}</td></tr>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+    {% if sessions %}
+    <div class="card">
+      <div class="card-body">
+        <h5>Teaching Assignments ({{ sessions|length }})</h5>
+        <table class="table table-sm table-bordered">
+          <thead><tr><th>Day</th><th>Time</th><th>Unit</th><th>Programme</th><th>Group</th><th>Venue</th></tr></thead>
+          <tbody>
+            {% for s in sessions %}
+            <tr>
+              <td>{{ s.day }}</td>
+              <td>{{ s.start_time }}-{{ s.end_time }}</td>
+              <td>{{ s.unit.code }}</td>
+              <td>{{ s.programme.code }}</td>
+              <td>{{ s.class_group.group_name }}</td>
+              <td>{{ s.venue.code }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">No teaching assignments for this lecturer in the selected period.</div>
+    {% endif %}
+    {% else %}
+    <div class="alert alert-secondary">Select a lecturer to view their weekly timetable.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Generate Examination Timetable</h3>
+<form method="post">
+  {% csrf_token %}
+  <div class="mb-3"><label>Academic Level</label><select name="academic_level" class="form-select"><option value="">All</option><option value="diploma">Diploma</option><option value="degree">Degree</option></select></div>
+  <div class="mb-3"><label>Examination Period</label><select name="period" class="form-select">{% for p in periods %}<option value="{{ p.id }}">{{ p }}</option>{% endfor %}</select></div>
+  <div class="mb-3"><label>Academic Year</label><select name="academic_year" class="form-select">{% for y in years %}<option value="{{ y.id }}">{{ y }}</option>{% endfor %}</select></div>
+  <div class="mb-3"><label>Semester (optional)</label><select name="semester" class="form-select"><option value="">All</option>{% for s in semesters %}<option value="{{ s.id }}">{{ s }}</option>{% endfor %}</select></div>
+  <div class="mb-3"><label>School (optional)</label><select name="school" class="form-select"><option value="">All</option>{% for s in schools %}<option value="{{ s.id }}">{{ s }}</option>{% endfor %}</select></div>
+  <div class="mb-3"><label>Programme (optional)</label><select name="programme" class="form-select"><option value="">All</option>{% for p in programmes %}<option value="{{ p.id }}">{{ p }}</option>{% endfor %}</select></div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Generate (Single)</button>
+    <button class="btn btn-success" type="submit" formaction="/scheduling/exams/alternatives/">Generate 10 Alternatives</button>
+  </div>
+</form>
+{% endblock %}

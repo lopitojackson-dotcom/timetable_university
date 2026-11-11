@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block page_title %}Room Utilization{% endblock %}
+{% block content %}
+<h3>Room Utilization</h3>
+<div class="row g-3">
+  {% for d in data %}
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h5>{{ d.venue.name }}</h5>
+        <p class="mb-1">Code: {{ d.venue.code }}</p>
+        <p class="mb-1">Capacity: {{ d.venue.capacity }}</p>
+        <p class="mb-1">Type: {{ d.venue.get_venue_type_display }}</p>
+        <p class="mb-1">Teaching sessions: {{ d.teaching }}</p>
+        <p class="mb-0">Exam sessions: {{ d.exam }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
